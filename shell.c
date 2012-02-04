@@ -1019,7 +1019,8 @@ run_startup_files ()
       if ((run_by_ssh || isnetconn (fileno (stdin))) && shell_level < 2)
 	{
 #ifdef SYS_BASHRC
-	  /* Only run SYS_BASHRC if --rcfile was not used to set a custom file */
+	  /* Only run SYS_BASHRC if --rcfile was not used to set a custom file
+	   * Test fails if user input is the non-expanded string '~/.bashrc' */
 	  if (strcmp (bashrc_file, "~/.bashrc") == 0)
 	    {
 #  if defined (__OPENNT)
@@ -1108,7 +1109,8 @@ run_startup_files ()
       if (act_like_sh == 0 && no_rc == 0)
 	{
 #ifdef SYS_BASHRC
-	  /* Only run SYS_BASHRC if --rcfile was not used to set a custom file */
+	  /* Only run SYS_BASHRC if --rcfile was not used to set a custom file
+	   * Test fails if user input is the non-expanded string '~/.bashrc' */
 	  if (strcmp (bashrc_file, "~/.bashrc") == 0)
 	    {
 #  if defined (__OPENNT)
