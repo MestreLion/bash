@@ -191,7 +191,8 @@ int have_devfd = 0;
 #endif
 
 /* The name of the .(shell)rc file. */
-static char *bashrc_file = "~/.bashrc";
+static char default_bashrc_file[] = "~/.bashrc";
+static char *bashrc_file = default_bashrc_file;
 
 /* Non-zero means to act more like the Bourne shell on startup. */
 static int act_like_sh;
@@ -1019,11 +1020,15 @@ run_startup_files ()
       if ((run_by_ssh || isnetconn (fileno (stdin))) && shell_level < 2)
 	{
 #ifdef SYS_BASHRC
+	  /* Only run SYS_BASHRC if --rcfile was not used to set a custom file */
+  	  if (bashrc_file == default_bashrc_file)
+	    {
 #  if defined (__OPENNT)
-	  maybe_execute_file (_prefixInstallPath(SYS_BASHRC, NULL, 0), 1);
+	      maybe_execute_file (_prefixInstallPath(SYS_BASHRC, NULL, 0), 1);
 #  else
-	  maybe_execute_file (SYS_BASHRC, 1);
+	      maybe_execute_file (SYS_BASHRC, 1);
 #  endif
+	    }
 #endif
 	  maybe_execute_file (bashrc_file, 1);
 	  return;
@@ -1104,11 +1109,15 @@ run_startup_files ()
       if (act_like_sh == 0 && no_rc == 0)
 	{
 #ifdef SYS_BASHRC
+	  /* Only run SYS_BASHRC if --rcfile was not used to set a custom file */
+  	  if (bashrc_file == default_bashrc_file)
+	    {
 #  if defined (__OPENNT)
-	  maybe_execute_file (_prefixInstallPath(SYS_BASHRC, NULL, 0), 1);
+	      maybe_execute_file (_prefixInstallPath(SYS_BASHRC, NULL, 0), 1);
 #  else
-	  maybe_execute_file (SYS_BASHRC, 1);
+	      maybe_execute_file (SYS_BASHRC, 1);
 #  endif
+	    }
 #endif
 	  maybe_execute_file (bashrc_file, 1);
 	}
@@ -1767,7 +1776,7 @@ shell_reinitialize ()
 
   /* Ensure that the default startup file is used.  (Except that we don't
      execute this file for reinitialized shells). */
-  bashrc_file = "~/.bashrc";
+  bashrc_file = default_bashrc_file;
 
   /* Delete all variables and functions.  They will be reinitialized when
      the environment is parsed. */
