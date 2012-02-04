@@ -1019,11 +1019,15 @@ run_startup_files ()
       if ((run_by_ssh || isnetconn (fileno (stdin))) && shell_level < 2)
 	{
 #ifdef SYS_BASHRC
+	  /* Only run SYS_BASHRC if --rcfile was not used to set a custom file */
+	  if (strcmp (bashrc_file, "~/.bashrc") == 0)
+	    {
 #  if defined (__OPENNT)
-	  maybe_execute_file (_prefixInstallPath(SYS_BASHRC, NULL, 0), 1);
+	      maybe_execute_file (_prefixInstallPath(SYS_BASHRC, NULL, 0), 1);
 #  else
-	  maybe_execute_file (SYS_BASHRC, 1);
+	      maybe_execute_file (SYS_BASHRC, 1);
 #  endif
+	    }
 #endif
 	  maybe_execute_file (bashrc_file, 1);
 	  return;
@@ -1104,11 +1108,15 @@ run_startup_files ()
       if (act_like_sh == 0 && no_rc == 0)
 	{
 #ifdef SYS_BASHRC
+	  /* Only run SYS_BASHRC if --rcfile was not used to set a custom file */
+	  if (strcmp (bashrc_file, "~/.bashrc") == 0)
+	    {
 #  if defined (__OPENNT)
-	  maybe_execute_file (_prefixInstallPath(SYS_BASHRC, NULL, 0), 1);
+	      maybe_execute_file (_prefixInstallPath(SYS_BASHRC, NULL, 0), 1);
 #  else
-	  maybe_execute_file (SYS_BASHRC, 1);
+	      maybe_execute_file (SYS_BASHRC, 1);
 #  endif
+	    }
 #endif
 	  maybe_execute_file (bashrc_file, 1);
 	}
